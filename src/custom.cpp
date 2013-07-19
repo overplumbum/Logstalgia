@@ -14,7 +14,7 @@
 //virtual_host
 //pid
 
-Regex custom_entry("^([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)(?:\\|([^|]*))?(?:\\|#?([^|]*))?(?:\\|([^|]*))?(?:\\|([^|]*))?(?:\\|([^|]*))?(?:\\|([^|]*))?$");
+Regex custom_entry("^([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)\\|([^|]*)(?:\\|([^|]*))?(?:\\|#?([^|]*))?(?:\\|([^|]*))?(?:\\|([^|]*))?(?:\\|([^|]*))?(?:\\|([^|]*))?(?:\\|([^|]*))?$");
 
 CustomAccessLog::CustomAccessLog() {
 }
@@ -77,6 +77,11 @@ bool CustomAccessLog::parseLine(std::string& line, LogEntry& entry) {
     //pid or some other identifier
     if(matches.size()>10) {
         entry.pid = matches[10];
+    }
+
+    //response time
+    if(matches.size()>11) {
+        entry.response_time = strtod(matches[11].c_str(), 0);
     }
 
     return entry.validate();

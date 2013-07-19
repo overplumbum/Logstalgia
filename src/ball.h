@@ -46,6 +46,8 @@ protected:
     
     bool has_bounced;
     bool no_bounce;
+
+    float pitch_speed_factor;
 public:
     vec2 pos;
     vec2 vel;

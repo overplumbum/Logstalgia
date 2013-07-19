@@ -69,6 +69,7 @@ ProjectedBall::ProjectedBall(const vec2& pos, const vec2& vel, const vec3& colou
 
 void ProjectedBall::init(const vec2& pos, const vec2& vel, const vec3& colour, int dest_x, float size) {
 
+    this->pitch_speed_factor = 1.0;
     this->pos = pos;
     this->vel = vel;
     this->colour = colour;
@@ -169,7 +170,7 @@ void ProjectedBall::bounce() {
 }
 
 float ProjectedBall::arrivalTime() {
-    return (total_distance-distance_travelled) / (settings.pitch_speed * (float) display.width);
+    return (total_distance-distance_travelled) / (settings.pitch_speed * pitch_speed_factor * (float) display.width);
 }
 
 float ProjectedBall::getProgress() const {
@@ -181,7 +182,7 @@ void ProjectedBall::dontBounce() {
 }
 
 void ProjectedBall::logic(float dt) {
-    distance_travelled += dt * settings.pitch_speed * (float) display.width;
+    distance_travelled += dt * settings.pitch_speed * pitch_speed_factor * (float) display.width;
 
     if(distance_travelled >= total_distance) {
 

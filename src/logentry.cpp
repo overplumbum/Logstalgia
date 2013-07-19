@@ -31,6 +31,7 @@ AccessLog::AccessLog() {
 LogEntry::LogEntry() {
     timestamp = 0;
     response_size = 0;
+    response_time = -1.0;
     successful = false;
     response_colour = vec3(1.0, 0.0, 0.0);
 }

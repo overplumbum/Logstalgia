@@ -15,6 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <math.h>
 #include "requestball.h"
 #include "settings.h"
 
@@ -30,6 +31,14 @@ RequestBall::RequestBall(LogEntry* le, FXFont* font, TextureResource* tex, const
     if(size<5.0f) size = 5.0f;
 
     ProjectedBall::init(pos, vel, colour, (int)dest.x, size);
+
+    if (le->response_time >= 0) {
+        const float dynamic_factor = 0.5; // less numbers => moar remarkable speed differences
+        const float middle_request_time = 100.0; // ms
+        this->pitch_speed_factor = logf(middle_request_time*dynamic_factor) / logf(dynamic_factor*(le->response_time*1000.0+3.0));
+    } else {
+        this->pitch_speed_factor = 1.0;
+    }
 
     start = pos;
     this->dest  = finish();
@@ -72,6 +81,10 @@ bool RequestBall::mouseOver(TextArea& textarea, vec2& mouse) {
 
         if(le->referrer.size()>0)   content.push_back( std::string("Referrer:     ") + le->referrer );
         if(le->user_agent.size()>0) content.push_back( std::string("User-Agent:   ") + le->user_agent );
+
+        char buff[60];
+        snprintf(buff, 60, "%f", le->response_time);
+        content.push_back( std::string("Response-Time:  ") + std::string(buff) );
 
         textarea.setText(content);
         textarea.setPos(mouse);
